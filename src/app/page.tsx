@@ -69,17 +69,17 @@ export default function Page() {
                 Saving…
               </span>
             )}
-            <div className="flex items-center gap-1 rounded-lg border border-[var(--border)] p-1" style={{ background: 'var(--surface)' }}>
+            <div className="flex items-center rounded-lg border border-[var(--border)] overflow-hidden" style={{ background: 'var(--surface)' }}>
               <button
                 onClick={() => setUnit('m')}
-                className="text-xs font-600 px-3 py-1 rounded-md transition-colors"
-                style={unit === 'm' ? { background: 'var(--indigo)', color: '#fff' } : { color: 'var(--ink-soft)' }}
-              >$m</button>
+                className="text-sm font-600 px-4 py-2 transition-colors"
+                style={unit === 'm' ? { background: 'var(--indigo)', color: '#fff' } : { color: 'var(--ink-soft)', background: 'transparent' }}
+              >Millions ($m)</button>
               <button
                 onClick={() => setUnit('k')}
-                className="text-xs font-600 px-3 py-1 rounded-md transition-colors"
-                style={unit === 'k' ? { background: 'var(--indigo)', color: '#fff' } : { color: 'var(--ink-soft)' }}
-              >$k</button>
+                className="text-sm font-600 px-4 py-2 transition-colors border-l border-[var(--border)]"
+                style={unit === 'k' ? { background: 'var(--indigo)', color: '#fff' } : { color: 'var(--ink-soft)', background: 'transparent' }}
+              >Thousands ($k)</button>
             </div>
           </div>
         </div>

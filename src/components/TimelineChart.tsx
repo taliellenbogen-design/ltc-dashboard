@@ -37,7 +37,7 @@ export default function TimelineChart({ contracts, unit }: { contracts: Contract
     return (
       <div className="card" style={{ borderTop: '2px solid var(--teal)', minHeight: CHART_HEIGHT }}>
         <div className="px-6 py-4 border-b border-[var(--border)]">
-          <h2 className="text-base font-700 text-ink">Commitment Timeline</h2>
+          <h2 className="text-base font-700 text-ink">Contract Timeline</h2>
         </div>
         <div className="flex items-center justify-center" style={{ height: CHART_HEIGHT - 60 }}>
           <p className="text-[var(--ink-soft)] text-sm">No active contracts with end dates yet. Add one above to see the timeline.</p>
@@ -95,7 +95,7 @@ export default function TimelineChart({ contracts, unit }: { contracts: Contract
   return (
     <div className="card" style={{ borderTop: '2px solid var(--teal)' }}>
       <div className="px-6 py-4 border-b border-[var(--border)]">
-        <h2 className="text-base font-700 text-ink">Commitment Timeline</h2>
+        <h2 className="text-base font-700 text-ink">Contract Timeline</h2>
       </div>
       <div ref={containerRef} style={{ width: '100%' }}>
         <svg
