@@ -11,6 +11,7 @@ import ActionItemsCard from '@/components/ActionItemsCard'
 export default function Page() {
   const [data, setData] = useState<AppData | null>(null)
   const [saving, setSaving] = useState(false)
+  const [unit, setUnit] = useState<'m' | 'k'>('m')
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const isFirst = useRef(true)
 
@@ -62,19 +63,31 @@ export default function Page() {
               Track customer contracts, renewal timelines, and team actions
             </p>
           </div>
-          <div className="flex items-center gap-2 mt-1">
+          <div className="flex items-center gap-3 mt-1">
             {saving && (
               <span className="text-xs px-2 py-1 rounded-full" style={{ background: 'var(--teal-soft)', color: 'var(--teal)' }}>
                 Saving…
               </span>
             )}
+            <div className="flex items-center gap-1 rounded-lg border border-[var(--border)] p-1" style={{ background: 'var(--surface)' }}>
+              <button
+                onClick={() => setUnit('m')}
+                className="text-xs font-600 px-3 py-1 rounded-md transition-colors"
+                style={unit === 'm' ? { background: 'var(--indigo)', color: '#fff' } : { color: 'var(--ink-soft)' }}
+              >$m</button>
+              <button
+                onClick={() => setUnit('k')}
+                className="text-xs font-600 px-3 py-1 rounded-md transition-colors"
+                style={unit === 'k' ? { background: 'var(--indigo)', color: '#fff' } : { color: 'var(--ink-soft)' }}
+              >$k</button>
+            </div>
           </div>
         </div>
       </header>
 
       {/* 1. KPI strip */}
       <section className="mb-5">
-        <KpiStrip contracts={data.contracts} />
+        <KpiStrip contracts={data.contracts} unit={unit} />
       </section>
 
       {/* 2. Table + Donut */}
@@ -84,13 +97,14 @@ export default function Page() {
         <ContractsTable
           contracts={data.contracts}
           onChange={contracts => update({ contracts })}
+          unit={unit}
         />
         <DonutChart contracts={data.contracts} />
       </section>
 
       {/* 3. Timeline – full width */}
       <section className="mb-5">
-        <TimelineChart contracts={data.contracts} />
+        <TimelineChart contracts={data.contracts} unit={unit} />
       </section>
 
       {/* 4. Reminders + Action Items */}

@@ -4,7 +4,7 @@ import { useRef, useEffect, useState } from 'react'
 
 function pad2(n: number) { return String(n).padStart(2, '0') }
 function fmtDate(d: Date) { return `${pad2(d.getDate())}/${pad2(d.getMonth() + 1)}/${String(d.getFullYear()).slice(2)}` }
-function fmtTcv(n: number) { return `$${n}m` }
+function fmtTcv(n: number, unit: 'm' | 'k') { return `$${n}${unit}` }
 
 function urgencyColor(endDate: string): string {
   const today = new Date(); today.setHours(0,0,0,0)
@@ -20,7 +20,7 @@ const MARGIN = { top: 50, bottom: 90, left: 24, right: 40 }
 const MIN_STEM = 60
 const MAX_STEM = 230
 
-export default function TimelineChart({ contracts }: { contracts: Contract[] }) {
+export default function TimelineChart({ contracts, unit }: { contracts: Contract[]; unit: 'm' | 'k' }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [width, setWidth] = useState(900)
 
@@ -167,7 +167,7 @@ export default function TimelineChart({ contracts }: { contracts: Contract[] }) 
                   x={x} y={dotY - 18}
                   fontSize={16} fontWeight={800} fontFamily="Rubik"
                   fill="var(--ink)" textAnchor="middle"
-                >{fmtTcv(Number(c.tcv) || 0)}</text>
+                >{fmtTcv(Number(c.tcv) || 0, unit)}</text>
                 {/* Customer name */}
                 <text
                   x={x} y={dotY - 36}

@@ -5,9 +5,10 @@ import { v4 as uuid } from 'uuid'
 interface Props {
   contracts: Contract[]
   onChange: (contracts: Contract[]) => void
+  unit: 'm' | 'k'
 }
 
-export default function ContractsTable({ contracts, onChange }: Props) {
+export default function ContractsTable({ contracts, onChange, unit }: Props) {
   function update(id: string, patch: Partial<Contract>) {
     onChange(contracts.map(c => c.id === id ? { ...c, ...patch } : c))
   }
@@ -34,7 +35,7 @@ export default function ContractsTable({ contracts, onChange }: Props) {
               <th className="px-6 py-3 font-600">Customer</th>
               <th className="px-4 py-3 font-600 text-center">Has Contract?</th>
               <th className="px-4 py-3 font-600">End Date</th>
-              <th className="px-4 py-3 font-600">Total Contract Value ($m)</th>
+              <th className="px-4 py-3 font-600">Total Contract Value (${unit})</th>
               <th className="px-4 py-3 w-10"></th>
             </tr>
           </thead>

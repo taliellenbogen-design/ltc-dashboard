@@ -1,12 +1,16 @@
 'use client'
 import type { Contract } from '@/lib/types'
 
-function fmt(n: number) {
+function fmt(n: number, unit: 'm' | 'k') {
+  if (unit === 'k') {
+    if (n >= 1000) return `$${(n / 1000).toFixed(0)}m`
+    return `$${n}k`
+  }
   if (n >= 1000) return `$${(n / 1000).toFixed(1)}b`
   return `$${n}m`
 }
 
-export default function KpiStrip({ contracts }: { contracts: Contract[] }) {
+export default function KpiStrip({ contracts, unit }: { contracts: Contract[]; unit: 'm' | 'k' }) {
   const total   = contracts.length
   const active  = contracts.filter(c => c.hasLTC).length
   const pct     = total === 0 ? 0 : Math.round((active / total) * 100)
@@ -22,7 +26,7 @@ export default function KpiStrip({ contracts }: { contracts: Contract[] }) {
   const cards = [
     { label: 'Active Contracts',                value: `${active} / ${total}`, accent: 'var(--green)' },
     { label: '% Active',                        value: `${pct}%`,              accent: 'var(--green)' },
-    { label: 'Total Contract Value (Active)',   value: fmt(tcvSum),            accent: 'var(--indigo)' },
+    { label: 'Total Contract Value (Active)',   value: fmt(tcvSum, unit),      accent: 'var(--indigo)' },
     {
       label: 'Renewing in 60 Days',
       value: String(renewing),
