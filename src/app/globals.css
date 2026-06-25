@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #FAFAF7;
+  --surface: #FFFFFF;
+  --ink: #1F2A37;
+  --ink-soft: #6B7480;
+  --border: #E7E2D7;
+  --green: #2F9E58;
+  --green-soft: #DCF0E2;
+  --gray-chip: #C9CDD3;
+  --teal: #2F8F82;
+  --teal-soft: #DCEFEA;
+  --indigo: #5A5FCB;
+  --indigo-soft: #E4E4F8;
+  --red: #D14343;
+  --red-soft: #F8DCDC;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'Rubik', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  margin: 0;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator { opacity: 0.5; cursor: pointer; }
+
+.card {
+  background: var(--surface);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.card-header-green { border-top: 2px solid var(--green); border-radius: 14px 14px 0 0; }
+.card-header-teal  { border-top: 2px solid var(--teal);  border-radius: 14px 14px 0 0; }
+.card-header-indigo{ border-top: 2px solid var(--indigo); border-radius: 14px 14px 0 0; }
+.card-header-red   { border-top: 2px solid var(--red);   border-radius: 14px 14px 0 0; }
+
+input:focus, select:focus, button:focus-visible {
+  outline: 2px solid var(--indigo);
+  outline-offset: 2px;
+}
