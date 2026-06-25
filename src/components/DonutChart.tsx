@@ -15,7 +15,7 @@ export default function DonutChart({ contracts }: { contracts: Contract[] }) {
   return (
     <div className="card h-full" style={{ borderTop: '2px solid var(--green)' }}>
       <div className="px-6 py-4 border-b border-[var(--border)]">
-        <h2 className="text-base font-700 text-ink">Commitment Coverage</h2>
+        <h2 className="text-base font-700 text-ink">Contract Coverage</h2>
       </div>
       <div className="flex flex-col items-center py-6 gap-6">
         <svg viewBox="0 0 200 200" width={180} height={180} role="img" aria-label={`${pct}% of customers have an active commitment`}>
@@ -42,20 +42,20 @@ export default function DonutChart({ contracts }: { contracts: Contract[] }) {
             </>
           )}
           <text x={cx} y={cy - 8} textAnchor="middle" fontSize={28} fontWeight={800} fontFamily="Rubik" fill="var(--ink)">{pct}%</text>
-          <text x={cx} y={cy + 14} textAnchor="middle" fontSize={11} fontFamily="Rubik" fill="var(--ink-soft)">with LTC</text>
+          <text x={cx} y={cy + 14} textAnchor="middle" fontSize={11} fontFamily="Rubik" fill="var(--ink-soft)">with contract</text>
         </svg>
         <div className="flex flex-col gap-2 w-full px-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 rounded-full inline-block" style={{ background: 'var(--green)' }} />
-              <span className="text-sm text-ink">Has commitment</span>
+              <span className="text-sm text-ink">Has contract</span>
             </div>
             <span className="text-sm font-700 text-ink">{active}</span>
           </div>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 rounded-full inline-block" style={{ background: 'var(--gray-chip)' }} />
-              <span className="text-sm text-ink">No commitment</span>
+              <span className="text-sm text-ink">No contract</span>
             </div>
             <span className="text-sm font-700 text-ink">{none}</span>
           </div>

@@ -11,8 +11,8 @@ function urgencyColor(endDate: string): string {
   const d = new Date(endDate); d.setHours(0,0,0,0)
   const diff = Math.ceil((d.getTime() - today.getTime()) / 86400000)
   if (diff <= 30) return 'var(--red)'
-  if (diff <= 90) return 'var(--green)'
-  return 'var(--gray-chip)'
+  if (diff <= 90) return '#F5A623'
+  return 'var(--green)'
 }
 
 const CHART_HEIGHT = 380
@@ -40,7 +40,7 @@ export default function TimelineChart({ contracts }: { contracts: Contract[] }) 
           <h2 className="text-base font-700 text-ink">Commitment Timeline</h2>
         </div>
         <div className="flex items-center justify-center" style={{ height: CHART_HEIGHT - 60 }}>
-          <p className="text-[var(--ink-soft)] text-sm">No active commitments with end dates yet. Add one above to see the timeline.</p>
+          <p className="text-[var(--ink-soft)] text-sm">No active contracts with end dates yet. Add one above to see the timeline.</p>
         </div>
       </div>
     )
@@ -171,8 +171,8 @@ export default function TimelineChart({ contracts }: { contracts: Contract[] }) 
                 {/* Customer name */}
                 <text
                   x={x} y={dotY - 36}
-                  fontSize={13} fontFamily="Rubik"
-                  fill="var(--ink)" textAnchor="middle"
+                  fontSize={13} fontWeight={700} fontFamily="Rubik"
+                  fill={color} textAnchor="middle"
                 >{c.customer}</text>
                 {/* End date below axis dot */}
                 <text
@@ -189,9 +189,9 @@ export default function TimelineChart({ contracts }: { contracts: Contract[] }) 
       {/* Legend */}
       <div className="flex gap-5 px-6 pb-5 flex-wrap">
         {[
-          { color: 'var(--red)',      label: '≤ 30 days' },
-          { color: 'var(--green)',    label: '≤ 90 days' },
-          { color: 'var(--gray-chip)',label: '> 90 days' },
+          { color: 'var(--red)',  label: '≤ 30 days' },
+          { color: '#F5A623',    label: '31–90 days' },
+          { color: 'var(--green)',label: '> 90 days' },
         ].map(l => (
           <div key={l.label} className="flex items-center gap-2">
             <span className="w-3 h-3 rounded-full inline-block" style={{ background: l.color }} />

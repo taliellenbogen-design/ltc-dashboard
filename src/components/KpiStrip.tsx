@@ -20,9 +20,9 @@ export default function KpiStrip({ contracts }: { contracts: Contract[] }) {
   }).length
 
   const cards = [
-    { label: 'Active Commitments', value: `${active} / ${total}`, accent: 'var(--green)' },
-    { label: '% Active',           value: `${pct}%`,              accent: 'var(--green)' },
-    { label: 'Total TCV (Active)', value: fmt(tcvSum),            accent: 'var(--indigo)' },
+    { label: 'Active Contracts',                value: `${active} / ${total}`, accent: 'var(--green)' },
+    { label: '% Active',                        value: `${pct}%`,              accent: 'var(--green)' },
+    { label: 'Total Contract Value (Active)',   value: fmt(tcvSum),            accent: 'var(--indigo)' },
     {
       label: 'Renewing in 60 Days',
       value: String(renewing),

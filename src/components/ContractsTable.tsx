@@ -32,9 +32,9 @@ export default function ContractsTable({ contracts, onChange }: Props) {
           <thead>
             <tr className="text-left" style={{ color: 'var(--ink-soft)', borderBottom: '1px solid var(--border)' }}>
               <th className="px-6 py-3 font-600">Customer</th>
-              <th className="px-4 py-3 font-600 text-center">LTC?</th>
+              <th className="px-4 py-3 font-600 text-center">Has Contract?</th>
               <th className="px-4 py-3 font-600">End Date</th>
-              <th className="px-4 py-3 font-600">TCV ($m)</th>
+              <th className="px-4 py-3 font-600">Total Contract Value ($m)</th>
               <th className="px-4 py-3 w-10"></th>
             </tr>
           </thead>

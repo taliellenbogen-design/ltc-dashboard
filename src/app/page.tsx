@@ -57,9 +57,9 @@ export default function Page() {
       <header className="mb-6">
         <div className="flex items-start justify-between">
           <div>
-            <h1 className="text-2xl font-800 text-ink leading-tight">Long-Term Commitment Status</h1>
+            <h1 className="text-2xl font-800 text-ink leading-tight">Contract & Renewals Status</h1>
             <p className="text-sm mt-1" style={{ color: 'var(--ink-soft)' }}>
-              Track annual contracts, renewal timelines, and team actions
+              Track customer contracts, renewal timelines, and team actions
             </p>
           </div>
           <div className="flex items-center gap-2 mt-1">
