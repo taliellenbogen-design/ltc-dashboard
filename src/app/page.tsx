@@ -63,24 +63,12 @@ export default function Page() {
               Track customer contracts, renewal timelines, and team actions
             </p>
           </div>
-          <div className="flex items-center gap-3 mt-1">
+          <div className="flex items-center gap-2 mt-1">
             {saving && (
               <span className="text-xs px-2 py-1 rounded-full" style={{ background: 'var(--teal-soft)', color: 'var(--teal)' }}>
                 Saving…
               </span>
             )}
-            <div className="flex items-center rounded-lg border border-[var(--border)] overflow-hidden" style={{ background: 'var(--surface)' }}>
-              <button
-                onClick={() => setUnit('m')}
-                className="text-sm font-600 px-4 py-2 transition-colors"
-                style={unit === 'm' ? { background: 'var(--indigo)', color: '#fff' } : { color: 'var(--ink-soft)', background: 'transparent' }}
-              >Millions ($m)</button>
-              <button
-                onClick={() => setUnit('k')}
-                className="text-sm font-600 px-4 py-2 transition-colors border-l border-[var(--border)]"
-                style={unit === 'k' ? { background: 'var(--indigo)', color: '#fff' } : { color: 'var(--ink-soft)', background: 'transparent' }}
-              >Thousands ($k)</button>
-            </div>
           </div>
         </div>
       </header>
@@ -98,6 +86,7 @@ export default function Page() {
           contracts={data.contracts}
           onChange={contracts => update({ contracts })}
           unit={unit}
+          onUnitChange={setUnit}
         />
         <DonutChart contracts={data.contracts} />
       </section>

@@ -6,9 +6,10 @@ interface Props {
   contracts: Contract[]
   onChange: (contracts: Contract[]) => void
   unit: 'm' | 'k'
+  onUnitChange: (u: 'm' | 'k') => void
 }
 
-export default function ContractsTable({ contracts, onChange, unit }: Props) {
+export default function ContractsTable({ contracts, onChange, unit, onUnitChange }: Props) {
   function update(id: string, patch: Partial<Contract>) {
     onChange(contracts.map(c => c.id === id ? { ...c, ...patch } : c))
   }
@@ -35,7 +36,23 @@ export default function ContractsTable({ contracts, onChange, unit }: Props) {
               <th className="px-6 py-3 font-600">Customer</th>
               <th className="px-4 py-3 font-600 text-center">Has Contract?</th>
               <th className="px-4 py-3 font-600">End Date</th>
-              <th className="px-4 py-3 font-600">Total Contract Value (${unit})</th>
+              <th className="px-4 py-3 font-600">
+                <div className="flex items-center gap-2">
+                  <span>Total Contract Value</span>
+                  <div className="flex items-center rounded border border-[var(--border)] overflow-hidden text-xs font-600">
+                    <button
+                      onClick={() => onUnitChange('m')}
+                      className="px-2 py-0.5 transition-colors"
+                      style={unit === 'm' ? { background: 'var(--indigo)', color: '#fff' } : { color: 'var(--ink-soft)' }}
+                    >$m</button>
+                    <button
+                      onClick={() => onUnitChange('k')}
+                      className="px-2 py-0.5 border-l border-[var(--border)] transition-colors"
+                      style={unit === 'k' ? { background: 'var(--indigo)', color: '#fff' } : { color: 'var(--ink-soft)' }}
+                    >$k</button>
+                  </div>
+                </div>
+              </th>
               <th className="px-4 py-3 w-10"></th>
             </tr>
           </thead>
