@@ -5,6 +5,8 @@ const SEED: AppData = {
     { id: 'c1', customer: 'Sample Client 1', hasLTC: true,  endDate: '2026-12-31', tcv: 15 },
     { id: 'c2', customer: 'Sample Client 2', hasLTC: true,  endDate: '2026-09-30', tcv: 8  },
     { id: 'c3', customer: 'Sample Client 3', hasLTC: false, endDate: '',           tcv: 5  },
+    { id: 'c4', customer: 'Sample Client 4', hasLTC: true,  endDate: '2026-10-31', tcv: 20 },
+    { id: 'c5', customer: 'Sample Client 5', hasLTC: true,  endDate: '2026-11-15', tcv: 11 },
   ],
   reminders: [],
   actionItems: [],
