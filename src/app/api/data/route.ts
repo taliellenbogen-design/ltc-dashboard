@@ -16,12 +16,20 @@ function getUserId(req: NextRequest): { userId: string; isNew: boolean } {
 
 export async function GET(req: NextRequest) {
   const { userId, isNew } = getUserId(req)
-  const data = await readData(userId)
-  const res = NextResponse.json(data)
-  if (isNew) {
-    res.cookies.set(COOKIE, userId, { maxAge: ONE_YEAR, httpOnly: true, sameSite: 'lax' })
+  try {
+    const data = await readData(userId)
+    const res = NextResponse.json(data)
+    if (isNew) {
+      res.cookies.set(COOKIE, userId, { maxAge: ONE_YEAR, httpOnly: true, sameSite: 'lax' })
+    }
+    return res
+  } catch (e) {
+    console.error('[GET /api/data] error:', e)
+    const vars = Object.keys(process.env).filter(k =>
+      k.includes('KV') || k.includes('UPSTASH') || k.includes('REDIS') || k.includes('STORAGE')
+    )
+    return NextResponse.json({ error: String(e), envVars: vars }, { status: 500 })
   }
-  return res
 }
 
 export async function POST(req: NextRequest) {

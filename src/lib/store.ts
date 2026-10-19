@@ -26,10 +26,16 @@ function kvKey(userId: string) {
 
 async function getRedis() {
   const { Redis } = await import('@upstash/redis')
-  return new Redis({
-    url: process.env.KV_REST_API_URL ?? process.env.UPSTASH_REDIS_REST_URL ?? '',
-    token: process.env.KV_REST_API_TOKEN ?? process.env.UPSTASH_REDIS_REST_TOKEN ?? '',
-  })
+  // Try all possible env var names that Upstash/Vercel integration might use
+  const url   = process.env.KV_REST_API_URL
+             ?? process.env.UPSTASH_REDIS_REST_URL
+             ?? process.env.STORAGE_URL
+             ?? ''
+  const token = process.env.KV_REST_API_TOKEN
+             ?? process.env.UPSTASH_REDIS_REST_TOKEN
+             ?? process.env.STORAGE_TOKEN
+             ?? ''
+  return new Redis({ url, token })
 }
 
 export async function readData(userId: string): Promise<AppData> {
