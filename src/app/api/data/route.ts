@@ -25,21 +25,22 @@ export async function GET(req: NextRequest) {
     return res
   } catch (e) {
     console.error('[GET /api/data] error:', e)
-    const vars = Object.keys(process.env).filter(k =>
-      k.includes('KV') || k.includes('UPSTASH') || k.includes('REDIS') || k.includes('STORAGE')
-    )
-    const urlPreview = (process.env.KV_REST_API_URL ?? 'NOT SET').slice(0, 40)
-    return NextResponse.json({ error: String(e), envVars: vars, urlPreview }, { status: 500 })
+    return NextResponse.json({ error: String(e) }, { status: 500 })
   }
 }
 
 export async function POST(req: NextRequest) {
   const { userId, isNew } = getUserId(req)
-  const body = await req.json() as AppData
-  await writeData(userId, body)
-  const res = NextResponse.json({ ok: true })
-  if (isNew) {
-    res.cookies.set(COOKIE, userId, { maxAge: ONE_YEAR, httpOnly: true, sameSite: 'lax' })
+  try {
+    const body = await req.json() as AppData
+    await writeData(userId, body)
+    const res = NextResponse.json({ ok: true })
+    if (isNew) {
+      res.cookies.set(COOKIE, userId, { maxAge: ONE_YEAR, httpOnly: true, sameSite: 'lax' })
+    }
+    return res
+  } catch (e) {
+    console.error('[POST /api/data] error:', e)
+    return NextResponse.json({ error: String(e) }, { status: 500 })
   }
-  return res
 }
