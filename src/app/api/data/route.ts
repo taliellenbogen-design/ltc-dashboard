@@ -28,7 +28,8 @@ export async function GET(req: NextRequest) {
     const vars = Object.keys(process.env).filter(k =>
       k.includes('KV') || k.includes('UPSTASH') || k.includes('REDIS') || k.includes('STORAGE')
     )
-    return NextResponse.json({ error: String(e), envVars: vars }, { status: 500 })
+    const urlPreview = (process.env.KV_REST_API_URL ?? 'NOT SET').slice(0, 40)
+    return NextResponse.json({ error: String(e), envVars: vars, urlPreview }, { status: 500 })
   }
 }
 
