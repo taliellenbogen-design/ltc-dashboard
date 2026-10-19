@@ -24,20 +24,6 @@ function kvKey(userId: string) {
   return `ltc_data:${userId}`
 }
 
-async function getRedis() {
-  const { Redis } = await import('@upstash/redis')
-  // Try all possible env var names that Upstash/Vercel integration might use
-  const url   = process.env.KV_REST_API_URL
-             ?? process.env.UPSTASH_REDIS_REST_URL
-             ?? process.env.STORAGE_URL
-             ?? ''
-  const token = process.env.KV_REST_API_TOKEN
-             ?? process.env.UPSTASH_REDIS_REST_TOKEN
-             ?? process.env.STORAGE_TOKEN
-             ?? ''
-  return new Redis({ url, token })
-}
-
 export async function readData(userId: string): Promise<AppData> {
   if (process.env.NODE_ENV === 'development') {
     const fs   = await import('fs')
@@ -50,12 +36,14 @@ export async function readData(userId: string): Promise<AppData> {
     return JSON.parse(fs.readFileSync(file, 'utf-8')) as AppData
   }
 
-  const redis = await getRedis()
-  const data  = await redis.get<AppData>(kvKey(userId))
+  const { kv } = await import('@vercel/kv')
+  const data = await kv.get<AppData>(kvKey(userId))
   if (!data) {
-    await redis.set(kvKey(userId), SEED)
+    await kv.set(kvKey(userId), JSON.stringify(SEED))
     return SEED
   }
+  // @vercel/kv sometimes returns already-parsed objects
+  if (typeof data === 'string') return JSON.parse(data) as AppData
   return data
 }
 
@@ -66,6 +54,6 @@ export async function writeData(userId: string, data: AppData): Promise<void> {
     fs.writeFileSync(path.join(process.cwd(), `data_${userId.slice(0, 8)}.json`), JSON.stringify(data, null, 2))
     return
   }
-  const redis = await getRedis()
-  await redis.set(kvKey(userId), data)
+  const { kv } = await import('@vercel/kv')
+  await kv.set(kvKey(userId), JSON.stringify(data))
 }
