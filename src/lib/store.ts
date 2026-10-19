@@ -20,8 +20,30 @@ const SEED: AppData = {
   ],
 }
 
-function kvKey(userId: string) {
-  return `ltc_data:${userId}`
+function kvKey(userId: string) { return `ltc_data:${userId}` }
+
+// Direct Upstash REST API calls — no library needed
+async function upstashGet<T>(key: string): Promise<T | null> {
+  const url   = process.env.KV_REST_API_URL!
+  const token = process.env.KV_REST_API_TOKEN!
+  const res = await fetch(`${url}/get/${encodeURIComponent(key)}`, {
+    headers: { Authorization: `Bearer ${token}` },
+    cache: 'no-store',
+  })
+  const json = await res.json() as { result: string | null }
+  if (!json.result) return null
+  return JSON.parse(json.result) as T
+}
+
+async function upstashSet(key: string, value: unknown): Promise<void> {
+  const url   = process.env.KV_REST_API_URL!
+  const token = process.env.KV_REST_API_TOKEN!
+  await fetch(`${url}/set/${encodeURIComponent(key)}`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(JSON.stringify(value)),
+    cache: 'no-store',
+  })
 }
 
 export async function readData(userId: string): Promise<AppData> {
@@ -36,14 +58,11 @@ export async function readData(userId: string): Promise<AppData> {
     return JSON.parse(fs.readFileSync(file, 'utf-8')) as AppData
   }
 
-  const { kv } = await import('@vercel/kv')
-  const data = await kv.get<AppData>(kvKey(userId))
+  const data = await upstashGet<AppData>(kvKey(userId))
   if (!data) {
-    await kv.set(kvKey(userId), JSON.stringify(SEED))
+    await upstashSet(kvKey(userId), SEED)
     return SEED
   }
-  // @vercel/kv sometimes returns already-parsed objects
-  if (typeof data === 'string') return JSON.parse(data) as AppData
   return data
 }
 
@@ -54,6 +73,5 @@ export async function writeData(userId: string, data: AppData): Promise<void> {
     fs.writeFileSync(path.join(process.cwd(), `data_${userId.slice(0, 8)}.json`), JSON.stringify(data, null, 2))
     return
   }
-  const { kv } = await import('@vercel/kv')
-  await kv.set(kvKey(userId), JSON.stringify(data))
+  await upstashSet(kvKey(userId), data)
 }
