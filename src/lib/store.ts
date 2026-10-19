@@ -26,10 +26,16 @@ function kvKey(userId: string) { return `ltc_data:${userId}` }
 async function upstashGet<T>(key: string): Promise<T | null> {
   const url   = process.env.KV_REST_API_URL!
   const token = process.env.KV_REST_API_TOKEN!
-  const res = await fetch(`${url}/get/${encodeURIComponent(key)}`, {
-    headers: { Authorization: `Bearer ${token}` },
-    cache: 'no-store',
-  })
+  let res: Response
+  try {
+    res = await fetch(`${url}/get/${encodeURIComponent(key)}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+  } catch (e: unknown) {
+    const err = e as { cause?: { code?: string; message?: string } }
+    throw new Error(`fetch failed: code=${err.cause?.code ?? '?'} msg=${err.cause?.message ?? String(e)}`)
+  }
+  if (!res.ok) throw new Error(`Upstash HTTP ${res.status}: ${await res.text()}`)
   const json = await res.json() as { result: string | null }
   if (!json.result) return null
   return JSON.parse(json.result) as T
@@ -38,12 +44,12 @@ async function upstashGet<T>(key: string): Promise<T | null> {
 async function upstashSet(key: string, value: unknown): Promise<void> {
   const url   = process.env.KV_REST_API_URL!
   const token = process.env.KV_REST_API_TOKEN!
-  await fetch(`${url}/set/${encodeURIComponent(key)}`, {
+  const res = await fetch(`${url}/set/${encodeURIComponent(key)}`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
     body: JSON.stringify(JSON.stringify(value)),
-    cache: 'no-store',
   })
+  if (!res.ok) throw new Error(`Upstash HTTP ${res.status}: ${await res.text()}`)
 }
 
 export async function readData(userId: string): Promise<AppData> {
