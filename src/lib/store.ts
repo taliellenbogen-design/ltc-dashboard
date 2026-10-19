@@ -20,13 +20,16 @@ const SEED: AppData = {
   ],
 }
 
-async function getKv() {
-  const { kv } = await import('@vercel/kv')
-  return kv
-}
-
 function kvKey(userId: string) {
   return `ltc_data:${userId}`
+}
+
+async function getRedis() {
+  const { Redis } = await import('@upstash/redis')
+  return new Redis({
+    url: process.env.KV_REST_API_URL ?? process.env.UPSTASH_REDIS_REST_URL ?? '',
+    token: process.env.KV_REST_API_TOKEN ?? process.env.UPSTASH_REDIS_REST_TOKEN ?? '',
+  })
 }
 
 export async function readData(userId: string): Promise<AppData> {
@@ -41,10 +44,10 @@ export async function readData(userId: string): Promise<AppData> {
     return JSON.parse(fs.readFileSync(file, 'utf-8')) as AppData
   }
 
-  const kv   = await getKv()
-  const data = await kv.get<AppData>(kvKey(userId))
+  const redis = await getRedis()
+  const data  = await redis.get<AppData>(kvKey(userId))
   if (!data) {
-    await kv.set(kvKey(userId), SEED)
+    await redis.set(kvKey(userId), SEED)
     return SEED
   }
   return data
@@ -57,6 +60,6 @@ export async function writeData(userId: string, data: AppData): Promise<void> {
     fs.writeFileSync(path.join(process.cwd(), `data_${userId.slice(0, 8)}.json`), JSON.stringify(data, null, 2))
     return
   }
-  const kv = await getKv()
-  await kv.set(kvKey(userId), data)
+  const redis = await getRedis()
+  await redis.set(kvKey(userId), data)
 }

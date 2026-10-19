@@ -17,7 +17,10 @@ export default function Page() {
 
   // Load on mount
   useEffect(() => {
-    fetch('/api/data').then(r => r.json()).then(setData)
+    fetch('/api/data')
+      .then(r => { if (!r.ok) throw new Error(`${r.status}`); return r.json() })
+      .then(setData)
+      .catch(e => { console.error('Failed to load data:', e); setData({ contracts: [], reminders: [], actionItems: [] }) })
   }, [])
 
   // Debounced save whenever data changes
